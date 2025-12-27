@@ -53,12 +53,12 @@ public class QuartzServiceImpl implements QuartzService {
             // 使用simpleTrigger规则
             Trigger trigger = null;
             if (jobTimes < 0) {
-                trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
+                trigger = TriggerBuilder.newTrigger().withIdentity(jobName.concat("_trigger"), jobGroupName)
                         .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(1).withIntervalInSeconds(jobTime))
                         .startNow().build();
             } else {
                 trigger = TriggerBuilder
-                        .newTrigger().withIdentity(jobName, jobGroupName).withSchedule(SimpleScheduleBuilder
+                        .newTrigger().withIdentity(jobName.concat("_trigger"), jobGroupName).withSchedule(SimpleScheduleBuilder
                                 .repeatSecondlyForever(1).withIntervalInSeconds(jobTime).withRepeatCount(jobTimes))
                         .startNow().build();
             }
@@ -94,7 +94,7 @@ public class QuartzServiceImpl implements QuartzService {
             // 定义调度触发规则
             // 使用cornTrigger规则
             // 触发器key
-            Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
+            Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName.concat("_trigger"), jobGroupName)
                     .startAt(DateBuilder.futureDate(1, IntervalUnit.SECOND))
                     .withSchedule(CronScheduleBuilder.cronSchedule(jobTime)).startNow().build();
             // 把作业和触发器注册到任务调度中

@@ -24,7 +24,7 @@ public class QuartzJobInitializer {
                 .build();
 
         Trigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity(jobName + "Trigger", groupName)
+                .withIdentity(jobName.concat("_trigger"), groupName)
                 .startNow()
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule()
                         .withIntervalInSeconds(intervalSeconds)
@@ -58,7 +58,7 @@ public class QuartzJobInitializer {
         // 定义调度触发规则
         // 使用cornTrigger规则
         // 触发器key
-        Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
+        Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName.concat("_trigger"), jobGroupName)
                 .startAt(DateBuilder.futureDate(1, DateBuilder.IntervalUnit.SECOND))
                 .withSchedule(CronScheduleBuilder.cronSchedule(jobTime)).startNow().build();
         // 把作业和触发器注册到任务调度中
