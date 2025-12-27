@@ -34,13 +34,12 @@ public class SchedulerConfig {
     }
 
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(Properties quartzProperties, ApplicationContext applicationContext) throws IOException {
+    public SchedulerFactoryBean schedulerFactoryBean(Properties quartzProperties,
+                                                     JobFactory jobFactory) throws IOException {
         SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContextScheduler");
         schedulerFactoryBean.setQuartzProperties(quartzProperties);
         schedulerFactoryBean.setStartupDelay(10);
-        AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();
-        jobFactory.setApplicationContext(applicationContext);
         schedulerFactoryBean.setJobFactory(jobFactory);
         return schedulerFactoryBean;
     }
