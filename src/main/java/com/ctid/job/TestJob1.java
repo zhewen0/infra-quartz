@@ -6,6 +6,8 @@ import org.quartz.PersistJobDataAfterExecution;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @PersistJobDataAfterExecution
 //@DisallowConcurrentExecution
@@ -14,8 +16,8 @@ public class TestJob1 extends QuartzJobBean {
     private QuartzService quartzService;
     @Override
     protected void executeInternal(org.quartz.JobExecutionContext context) {
-        System.out.println(quartzService.queryAllJob());
-        System.out.println("TestJob-X is executing...");
-        System.out.println(context.getJobDetail().getKey().getName());
+//        System.out.println(quartzService.queryAllJob());
+        String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        System.out.println("TestJob-X is executing..." + format);
     }
 }

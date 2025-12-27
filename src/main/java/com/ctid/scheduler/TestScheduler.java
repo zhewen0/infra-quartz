@@ -14,7 +14,7 @@ public class TestScheduler {
     private QuartzJobInitializer quartzJobInitializer;
     @PostConstruct
     public void execute() throws SchedulerException {
-        quartzJobInitializer.scheduleJobCron("1111", "222", TestJob1.class, "0/5 * * * * ?", null);
-        quartzJobInitializer.scheduleJob("1111", "222", TestJob1.class, 3);
+//        quartzJobInitializer.scheduleJob("1111", "222", TestJob1.class, 7);
+        quartzJobInitializer.scheduleJobCron("1111", "222", TestJob1.class, "0/7 * * * * ?",null);
     }
 }
