@@ -82,22 +82,22 @@ public class QuartzJobInitializer {
          * IGNORE_MISFIRES 错过的全部立即补偿
          */
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(jobTime);
-//        if (misfireEnum != null) {
-//            switch (misfireEnum) {
-//                case DO_NOTHING:
-//                    cronScheduleBuilder.withMisfireHandlingInstructionDoNothing();
-//                    break;
-//                case FIRE_AND_PROCEED:
-//                    cronScheduleBuilder.withMisfireHandlingInstructionFireAndProceed();
-//                    break;
-//                case IGNORE_MISFIRES:
-//                    cronScheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
-//                    break;
-//            }
-//        }
+        if (misfireEnum != null) {
+            switch (misfireEnum) {
+                case DO_NOTHING:
+                    cronScheduleBuilder.withMisfireHandlingInstructionDoNothing();
+                    break;
+                case FIRE_AND_PROCEED:
+                    cronScheduleBuilder.withMisfireHandlingInstructionFireAndProceed();
+                    break;
+                case IGNORE_MISFIRES:
+                    cronScheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
+                    break;
+            }
+        }
         Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName.concat("_trigger"), jobGroupName)
                 .startAt(DateBuilder.futureDate(1, DateBuilder.IntervalUnit.SECOND))
-                .withSchedule(cronScheduleBuilder.withMisfireHandlingInstructionDoNothing())
+                .withSchedule(cronScheduleBuilder)
                 .startNow()
                 .build();
         // 把作业和触发器注册到任务调度中
