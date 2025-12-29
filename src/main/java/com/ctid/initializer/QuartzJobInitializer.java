@@ -96,7 +96,6 @@ public class QuartzJobInitializer {
             }
         }
         Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName.concat("_trigger"), jobGroupName)
-                .startAt(DateBuilder.futureDate(1, DateBuilder.IntervalUnit.SECOND))
                 .withSchedule(cronScheduleBuilder)
                 .startNow()
                 .build();

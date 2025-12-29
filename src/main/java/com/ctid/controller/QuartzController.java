@@ -40,8 +40,8 @@ public class QuartzController {
     }
 
     @RequestMapping("/updateJob")
-    public ResponseEntity<String> updateJob(String jobName, String jobGroupName, String jobTime) {
-        quartzService.updateJob(jobName, jobGroupName, jobTime);
+    public ResponseEntity<String> updateJob(String jobName, String jobGroupName, String jobTime, @RequestParam(required = false) Integer misfire) {
+        quartzService.updateJob(jobName, jobGroupName, jobTime, misfire);
         return ResponseEntity.ok().build();
     }
 

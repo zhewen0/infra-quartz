@@ -57,8 +57,7 @@ public class QuartzServiceImpl implements QuartzService {
                         .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(jobTime).repeatForever())
                         .startNow().build();
             } else {
-                trigger = TriggerBuilder
-                        .newTrigger().withIdentity(jobName.concat("_trigger"), jobGroupName).withSchedule(
+                trigger = TriggerBuilder.newTrigger().withIdentity(jobName.concat("_trigger"), jobGroupName).withSchedule(
                                 SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(jobTime).withRepeatCount(jobTimes))
                         .startNow().build();
             }
@@ -110,7 +109,6 @@ public class QuartzServiceImpl implements QuartzService {
                 }
             }
             Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName.concat("_trigger"), jobGroupName)
-                    .startAt(DateBuilder.futureDate(1, IntervalUnit.SECOND))
                     .withSchedule(cronScheduleBuilder).startNow().build();
             // 把作业和触发器注册到任务调度中
             scheduler.scheduleJob(jobDetail, trigger);
@@ -126,15 +124,30 @@ public class QuartzServiceImpl implements QuartzService {
      * @param jobName
      * @param jobGroupName
      * @param jobTime
+     * @param misfire 任务过期策略（null:默认=2 1:忽略 2:触发一次 3:不触发）
      */
     @Override
-    public void updateJob(String jobName, String jobGroupName, String jobTime) {
+    public void updateJob(String jobName, String jobGroupName, String jobTime, Integer misfire) {
         try {
             log.info("updateJob, jobName: {}, jobGroupName: {}, jobTime: {}", jobName, jobGroupName, jobTime);
             TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroupName);
+            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(jobTime);
+            if (misfire != null) {
+                switch (misfire) {
+                    case 1:
+                        cronScheduleBuilder.withMisfireHandlingInstructionDoNothing();
+                        break;
+                    case 2:
+                        cronScheduleBuilder.withMisfireHandlingInstructionFireAndProceed();
+                        break;
+                    case 3:
+                        cronScheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
+                        break;
+                }
+            }
             CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey)
-                    .withSchedule(CronScheduleBuilder.cronSchedule(jobTime)).build();
+                    .withSchedule(cronScheduleBuilder).build();
             // 重启触发器
             scheduler.rescheduleJob(triggerKey, trigger);
         } catch (SchedulerException e) {
@@ -154,7 +167,7 @@ public class QuartzServiceImpl implements QuartzService {
         try {
             log.info("deleteJob, jobName: {}, jobGroupName: {}", jobName, jobGroupName);
             boolean b = scheduler.deleteJob(new JobKey(jobName, jobGroupName));
-            log.info("deleteJob, jobName: {}, jobGroupName: {}", jobName, jobGroupName);
+            log.info("deleteJob, jobName: {}, jobGroupName: {}，result: {}", jobName, jobGroupName, b);
         } catch (Exception e) {
             log.error("", e);
             throw new RuntimeException("delete job error!");
