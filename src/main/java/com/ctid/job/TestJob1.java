@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @PersistJobDataAfterExecution
-//@DisallowConcurrentExecution
+@DisallowConcurrentExecution
 public class TestJob1 extends QuartzJobBean {
     @Resource
     private QuartzService quartzService;
     @Override
     protected void executeInternal(org.quartz.JobExecutionContext context) {
+        long scheduledFireTime = context.getScheduledFireTime().getTime();
+
 //        System.out.println(quartzService.queryAllJob());
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         System.out.println("TestJob-X is executing..." + format);

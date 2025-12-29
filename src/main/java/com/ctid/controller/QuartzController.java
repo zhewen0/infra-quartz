@@ -32,9 +32,10 @@ public class QuartzController {
                                          @RequestParam String jobName,
                                          @RequestParam String jobGroupName,
                                          @RequestParam String jobTime,   // cron表达式
+                                         @RequestParam(required = false) Integer jobTimes,
                                          @RequestBody(required = false) Map<String, Object> jobData) throws ClassNotFoundException {
         Class<? extends QuartzJobBean> jobClass = (Class<? extends QuartzJobBean>) Class.forName(jobClassName);
-        quartzService.addJob(jobClass, jobName, jobGroupName, jobTime, jobData);
+        quartzService.addJob(jobClass, jobName, jobGroupName, jobTime, jobTimes, jobData);
         return ResponseEntity.ok().build();
     }
 

@@ -28,7 +28,7 @@ public interface QuartzService {
      * @param jobTime      任务时间表达式
      * @param jobData      任务参数
      */
-    void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, String jobTime, Map jobData);
+    void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, String jobTime, Integer misfire, Map jobData);
 
     /**
      * 修改一个任务job
