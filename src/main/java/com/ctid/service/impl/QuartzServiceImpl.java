@@ -19,14 +19,6 @@ public class QuartzServiceImpl implements QuartzService {
     @Autowired
     private Scheduler scheduler;
 
-    @PostConstruct
-    public void startScheduler() {
-        try {
-            scheduler.start();
-        } catch (SchedulerException e) {
-            log.error("启动任务调度异常", e);
-        }
-    }
 
     /**
      * 增加一个job
